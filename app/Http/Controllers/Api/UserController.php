@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceCollection;
 use App\User;
+use App\Utilities\LogFile;
 use App\Utilities\UserError;
+use App\Utilities\UserLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -41,6 +43,8 @@ class UserController extends Controller
         $user = User::find( $id );
         if( !$user ){
             $error = new UserError( 'User' , 'Not Found' , 403 );
+            $userLog = new UserLog( new LogFile('users.txt') );
+            $userLog->write_log( 'time, date , message, etc' );
             return $error->userNotFound();
         }
 
