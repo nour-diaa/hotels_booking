@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\UserResource;
+use App\Http\Resources\UserResourceCollection;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return UserResourceCollection
      */
-    public function index()
+    public function index() : UserResourceCollection
     {
-        //
+        $users = User::paginate( env( 'COLLECTION_PAGINATION' ) );
+
+        return new UserResourceCollection( $users );
     }
 
     /**
@@ -29,14 +32,12 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return UserResource
      */
-    public function show($id)
+    public function show( User $user )
     {
-        //
+        return new UserResource( $user );
     }
 
     /**
