@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceCollection;
 use App\User;
+use App\Utilities\UserError;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -33,10 +34,16 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @return UserResource
+     * @return UserResource|UserError
      */
-    public function show( User $user )
+    public function show( $id )
     {
+        $user = User::find( $id );
+        if( !$user ){
+            $error = new UserError( 'User' , 'Not Found' , 403 );
+            return $error->userNotFound();
+        }
+
         return new UserResource( $user );
     }
 
